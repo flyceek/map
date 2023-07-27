@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ 
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title>百度地图围栏</title>
+	<script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.9.1/jquery.js"></script>
+	<script type="text/javascript" src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=xMy5qWGHtUnF7wHjxeAw3z2PGI6lr7vG"></script>
+	<script type="text/javascript" src="https://api.map.baidu.com/api?type=subway&v=1.0&ak=xMy5qWGHtUnF7wHjxeAw3z2PGI6lr7vG"></script>
+<!-- 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=xMy5qWGHtUnF7wHjxeAw3z2PGI6lr7vG"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+	<link rel="stylesheet" href="//api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" /> -->
+</head>
+<body>
+	<!--百度地图容器-->
+	<div style="width:100%;height:100%;" id="subway_container"></div> 
+</body>
+<script type="text/javascript">
+	function getCityInfo(cityName){
+		var cityInfo="";
+		var cityList = BMapSub.SubwayCitiesList;
+		console.log("cityList");
+		console.log(cityList);
+		var subwaycity = null;
+		for (var i = 0; i < cityList.length; i++) {
+			if (cityList[i].name === cityName) {
+				cityInfo = cityList[i];
+				break;
+			}
+		}
+		return cityInfo;
+	}
+
+	$(document).ready(function(){
+		console.log("city subway info.");
+		var subwayCityName = '上海';
+		var cityInfo = getCityInfo(subwayCityName);
+
+		console.log(cityInfo);
+		var subway = new BMapSub.Subway('subway_container', cityInfo.citycode);
+		var subwayDetail = new BMapSub.DetailInfo(subway);
+
+		var zoomControl = new BMapSub.ZoomControl({
+		    anchor: BMAPSUB_ANCHOR_BOTTOM_RIGHT,
+		    offset: new BMapSub.Size(5,100)
+		});
+
+		subway.addControl(zoomControl);
+		subway.setZoom(0.8);
+
+		subway.addEventListener('subwayloaded', function() {
+			console.log("city subway detail info.");
+		});
+
+		subway.addEventListener('tap', function(e) {
+			var stationName=e.station.name;
+		    subwayDetail.search(stationName);
+
+		    // var startIcon = new BMapSub.Icon(
+		    //     'https://api.map.baidu.com/images/subway/start-bak.png',
+		    //     new BMapSub.Size(50, 80)
+		    // );
+		    // var marker = new BMapSub.Marker(stationName, {icon: startIcon});
+		    // subway.addMarker(marker);
+
+			console.log("您点击了 [http://e.station.name/"+ e.station.name+"]  站");
+		});
+	});
+</script>
+</html>
