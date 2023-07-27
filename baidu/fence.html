@@ -4,129 +4,47 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<title>百度地图围栏</title>
-	<script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/i18n/zh-CN.min.js"></script>
 	<!-- <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xMy5qWGHtUnF7wHjxeAw3z2PGI6lr7vG"></script> -->
-	<script type="text/javascript" src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=xMy5qWGHtUnF7wHjxeAw3z2PGI6lr7vG"></script>
+	<script src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=xMy5qWGHtUnF7wHjxeAw3z2PGI6lr7vG"></script>
 	<!-- <script type="text/javascript" src="https://api.map.baidu.com/getscript?type=webgl&v=1.0&ak=xMy5qWGHtUnF7wHjxeAw3z2PGI6lr7vG"></script> -->
-	<script type="text/javascript" src="https://api.map.baidu.com/api?type=subway&v=1.0&ak=xMy5qWGHtUnF7wHjxeAw3z2PGI6lr7vG"></script>
+	<!-- <script type="text/javascript" src="https://api.map.baidu.com/api?type=subway&v=1.0&ak=xMy5qWGHtUnF7wHjxeAw3z2PGI6lr7vG"></script> -->
 <!-- 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=xMy5qWGHtUnF7wHjxeAw3z2PGI6lr7vG"></script>
 	<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
 	<link rel="stylesheet" href="//api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" /> -->
-	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	<script type="text/javascript" src="baidu.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+	<link href="/map/favicon.ico" rel="icon" type="image/x-icon" />
+	<style>
+    body,
+    html,
+    #container {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        font-family: "微软雅黑";
+    }
+	</style>
 </head>
 <body>
+	<div>
+		<label for="id_label_city">
+			City:<select class="js-example-basic-single js-states form-control" id="id_label_city" style="width: 100px;"></select>
+		</label>
+	</div>
+	<hr>
 	<!--百度地图容器-->
-	<div style="width:100%;height:100%;" id="map"></div>
+	<div id="container"></div>
 </body>
 <script type="text/javascript">
-	function calculateCenter(pointArray) {
-	    var total = pointArray.length;
-	    var X = 0, Y = 0, Z = 0;
-	    pointArray.forEach(function (lnglat) {
-	        var lng = lnglat.lng * Math.PI / 180;
-	        var lat = lnglat.lat * Math.PI / 180;
-	        var x, y, z;
-	        x = Math.cos(lat) * Math.cos(lng);
-	        y = Math.cos(lat) * Math.sin(lng);
-	        z = Math.sin(lat);
-	        X += x;
-	        Y += y;
-	        Z += z;
-	    });
-	    X = X / total;
-	    Y = Y / total;
-	    Z = Z / total;
-
-	    var Lng = Math.atan2(Y, X);
-	    var Hyp = Math.sqrt(X * X + Y * Y);
-	    var Lat = Math.atan2(Z, Hyp);
-	    console.log(Lng, Lat, Hyp);
-	    var c_lng=Lng * 180 / Math.PI;
-	    var c_lat=Lat * 180 / Math.PI;
-	    return new BMapGL.Point(c_lng,c_lat);
- 	}
-
-	function parsePointArray(pointArrayString){
-		var pointArray=pointArrayString.split(";");
-		console.log("pointArray length:" + pointArray.length);
-		var bMapGLPointArray=[];
-		$.each(pointArray,function(k,v){
-			var pointLptArray=v.split(",");
-			var lng=pointLptArray[0];
-			var lat=pointLptArray[1];
-			bMapGLPointArray.push(new BMapGL.Point(lng,lat));
-		});
-		return bMapGLPointArray;
-	}
-
-	function createPolygonByPointArrayString(pointArrayString,map){
-		var pointArray=parsePointArray(pointArrayString);
-		createPolygonByPointArray(pointArray,map);
-	}
-
-	function createPolygonByPointArray(pointArray,map){
-		var polygon = new BMapGL.Polygon(pointArray, {
-			strokeColor: "red",
-			strokeWeight: 2,
-			strokeOpacity: 0.5,
-			fillColor: 'blue',
-	        fillOpacity: 0.2
-		}); //创建多边形
-		map.addOverlay(polygon);
-	}
-
-	function createMarker(iconUrl,point,map){
-		var centterPointMarker = new BMapGL.Marker(point);
-		var centterPointMarkerIcon = new BMapGL.Icon(iconUrl, new BMapGL.Size(52, 26));
-		map.addOverlay(centterPointMarker,{icon: centterPointMarkerIcon});
-	}
-
-	function createPolygon(pointArray,opts,map){
-		var polygon = new BMapGL.Polygon(pointArray, {
-			strokeColor: "red",
-			strokeWeight: 2,
-			strokeOpacity: 0.5,
-			fillColor: opts.fillColor,
-	        fillOpacity: 0.2
-		});
-		// polygon.enableEditing();
-		map.addOverlay(polygon);
-	}
-
-	function createLabel(point,text,map){
-		var label = new BMapGL.Label(text, {
-		    position: point,
-		    offset: new BMapGL.Size(20, -20)
-		});
-		label.setStyle({
-		    color: 'blue',
-		    borderRadius: '5px',
-		    borderColor: '#ccc',
-		    padding: '1px',
-		    fontSize: '14px',
-		    height: '20px',
-		    lineHeight: '20px',
-		    fontFamily: '微软雅黑'
-		});
-		map.addOverlay(label);
-	}
-
-	function createPolygonByPointJson(pointJson,map){
-		pointJson.pointArray=parsePointArray(pointJson.raw);
-		pointJson.centerPoint=calculateCenter(pointJson.pointArray);
-		console.log(pointJson.label +" centerPoint lng :"+pointJson.centerPoint.lng+ ", lat : "+pointJson.centerPoint.lat);
-		createPolygon(pointJson.pointArray,pointJson.polygonOpts,map);
-		createMarker("https://weBMapGL0.bdimg.com/image/api/marker_red.png",pointJson.centerPoint,map);
-		createLabel(pointJson.centerPoint,pointJson.label,map);
-	}
-
-	function createPolygonByPointJsonArray(pointJsonArray,map){
-		$.each(pointJsonArray,function(k,v){
-			createPolygonByPointJson(v,map);
-		});
-	}
-
 	$(document).ready(function(){
+
+		$('#id_label_city').select2({
+			placeholder: 'Select an option'
+		});
 
 		var pointJsonArray=[{
 			label:"闵行区-航华",
@@ -179,7 +97,7 @@
 		}];
 
 		var mapLevel=15;
-		var map = new BMapGL.Map("map");
+		var map = new BMapGL.Map("container");
 
 		createPolygonByPointJsonArray(pointJsonArray,map);
 
