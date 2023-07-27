@@ -43,7 +43,23 @@
 	$(document).ready(function(){
 
 		$('#id_label_city').select2({
-			placeholder: 'Select an option'
+			ajax: {
+				url: "https://flyceek.github.io/map/Region.json",
+				dataType: 'json',
+				delay: 250,
+				processResults: function (data, params) {
+					console.log("processResults.");
+					var cityList=[];
+					for(var city in data.CityList) {
+						cityList.push({"id":city.CityId,"text":city.CityName});
+					}
+					console.log(cityList);
+					return cityList;
+				},
+				cache: true
+			},
+			escapeMarkup: function (markup) { return markup; },
+			minimumInputLength: 1
 		});
 
 		var pointJsonArray=[{
