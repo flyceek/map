@@ -42,11 +42,39 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
+		$.ajax({
+			type: "get",
+			contentType: "application/json",
+			url: 'https://flyceek.github.io/map/Region.json',
+			dataType: "json",
+			data: {
+				t:123
+			},
+			async: "true",
+			success: function(result) {
+				console.log("success.");
+				console.log(result);
+			},
+			error: function(e) {
+				console.log("error.");
+				console.log(e);
+			}
+		});
+
 		$('#id_label_city').select2({
 			ajax: {
-				url: "https://flyceek.github.io/map/Region.json",
+				url: "https://flyceek.github.io/map/Region.json?1=1",
 				dataType: 'json',
+				data: function (params) {
+					console.log("data.");
+					var queryParameters = {
+					q: params.term
+					}
+
+					return queryParameters;
+				},
 				processResults: function (data, params) {
+					alert(123);
 					console.log("processResults.");
 					var cityList=[];
 					for(var city in data.CityList) {
@@ -55,9 +83,7 @@
 					console.log(cityList);
 					return cityList;
 				}
-			},
-			escapeMarkup: function (markup) { return markup; },
-			minimumInputLength: 1
+			}
 		});
 
 		var pointJsonArray=[{
