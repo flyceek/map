@@ -5,7 +5,7 @@
       "CityCode": "SH",
       "CityName": "上海",
       "CityFullPY": "shanghai",
-      "RetionList": [
+      "RegionList": [
         {
           "GScopeId": 2172,
           "GScopeCode": "H  ",
