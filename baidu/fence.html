@@ -51,7 +51,9 @@
 <script type="text/javascript">
 	$(document).ready(function () {
 		var mapLevel = 15;
+		var defaultCenterPoint=new BMapGL.Point(121.47004,31.23136);
 		var map = new BMapGL.Map("container");
+		map.centerAndZoom(defaultCenterPoint, 12); 
 		map.enableScrollWheelZoom(true);
 		map.addControl(new BMapGL.MapTypeControl());
 		map.addEventListener("click", function (e) {
