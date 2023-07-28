@@ -115,3 +115,13 @@ function createPolygonByPointJsonArray(pointJsonArray,map){
         createPolygonByPointJson(v,map);
     });
 }
+
+function clearOverlay(id,map){
+    var allOverlay = map.getOverlays();
+    console.log(allOverlay);
+    allOverlay.forEach(function(item,index,arr){
+        if(id==item._config.id){
+            map.removeOverlay(item);
+        }
+    });
+}

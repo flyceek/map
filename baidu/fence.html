@@ -186,16 +186,6 @@
             });
 		});
 
-		function clearOverlay(id,map){
-			var allOverlay = map.getOverlays();
-			console.log(allOverlay);
-			allOverlay.forEach(function(item,index,arr){
-				if(id==item._config.id){
-					map.removeOverlay(item);
-				}
-			});
-		}
-
 		areaSelector.on("select2:unselect",function(e){
 			console.log("select2:unselect");
 			var area=e.params.data;
