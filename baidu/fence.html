@@ -90,6 +90,7 @@
 		});
 
 		citySelector.on("select2:select", function (e) {
+			map.clearOverlays();
 			regionSelector.val(null).trigger("change");
 			areaSelector.val(null).trigger("change");
 			var city = e.params.data;
@@ -177,7 +178,7 @@
 					};
 					console.log(pointJson);
 					createPolygonByPointJson(pointJson,map);
-					map.centerAndZoom(pointJson.centerPoint, mapLevel);
+					map.centerAndZoom(pointJson.centerPoint, 13);
 					
 				},
 				error:function(e) {
