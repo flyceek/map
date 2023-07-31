@@ -122,6 +122,8 @@
 			});
 		});
 
+	
+
 		regionSelector.on("select2:select", function (e) {
 			map.clearOverlays();
 			areaSelector.val(null).trigger("change");
@@ -155,6 +157,7 @@
 				multiple:true,
 				maximumSelectionLength: 5
 			});
+			createMapPolygon(regtion.id,regtion.text,map);
 		});
 
 		areaSelector.on("select2:select", function (e) {
@@ -162,33 +165,7 @@
 			var regtion = $(regionSelector).select2("data")[0];
 			var area=e.params.data;
 			console.log("city id:",city.id,"region id:",regtion.id,"area id:",area.id);
-			$.ajax({
-				url:"/map/Regions/"+area.id+".json?t=",
-				type:"GET",
-				data:"t="+$.now(),
-				dataType:"json",
-				success:function (data) {
-					console.log(data);
-					var pointJson={
-						id:area.id,
-						label: regtion.text+"-"+area.text,
-						pointArray: [],
-						centerPoint: BMapGL.Point(0, 0),
-						polygonOpts: {
-							fillColor: getRandomColorV2()
-						},
-						raw: data.Points
-					};
-					console.log(pointJson);
-					createPolygonByPointJson(pointJson,map);
-					map.centerAndZoom(pointJson.centerPoint, 13);
-					
-				},
-				error:function(e) {
-					console.log("error");
-					console.log(e);
-				}
-            });
+			createMapPolygon(area.id,regtion.text+"-"+area.text,map);
 		});
 
 		areaSelector.on("select2:unselect",function(e){

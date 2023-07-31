@@ -130,3 +130,34 @@ function clearOverlay(id,map){
         }
     });
 }
+
+function createMapPolygon(id,label,map){
+    $.ajax({
+        url:"/map/Regions/"+id+".json",
+        type:"GET",
+        data:"t="+$.now(),
+        dataType:"json",
+        success:function (data) {
+            console.log(data);
+            var pointJson={
+                id:id,
+                label: label,
+                pointArray: [],
+                centerPoint: BMapGL.Point(0, 0),
+                polygonOpts: {
+                    fillColor: getRandomColorV2()
+                },
+                raw: data.Points
+            };
+            console.log(pointJson);
+            createPolygonByPointJson(pointJson,map);
+            map.centerAndZoom(pointJson.centerPoint, 13);
+            
+        },
+        error:function(e) {
+            console.log("error");
+            console.log(e);
+        }
+    });
+}
+
