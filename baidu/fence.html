@@ -16,7 +16,7 @@
 	<!-- 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=xMy5qWGHtUnF7wHjxeAw3z2PGI6lr7vG"></script>
 	<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
 	<link rel="stylesheet" href="//api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" /> -->
-	<script type="text/javascript" src="baidu.js"></script>
+	<script type="text/javascript" src="baidu.js?v=202307310916"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 	<link href="/map/favicon.ico" rel="icon" type="image/x-icon" />
 	<style>
@@ -75,7 +75,7 @@
 				url: "/map/Region.json",
 				dataType: 'json',
 				data: function (params) {
-					return { t: 1 };
+					return { t: $.now() };
 				},
 				processResults: function (data, params) {
 					console.log("city processResults.");
@@ -100,7 +100,7 @@
 					url: "/map/Region.json",
 					dataType: 'json',
 					data: function (params) {
-						return { t: 2 };
+						return { t: $.now() };
 					},
 					processResults: function (data, params) {
 						console.log("region processResults.");
@@ -131,7 +131,7 @@
 					url: "/map/Region.json",
 					dataType: 'json',
 					data: function (params) {
-						return { t: 3 };
+						return { t: $.now() };
 					},
 					processResults: function (data, params) {
 						console.log("area processResults.");
@@ -160,9 +160,9 @@
 			var area=e.params.data;
 			console.log("city id:",city.id,"region id:",regtion.id,"area id:",area.id);
 			$.ajax({
-				url:"/map/Regions/"+area.id+".json",
+				url:"/map/Regions/"+area.id+".json?t=",
 				type:"GET",
-				data:"t=1",
+				data:"t="+$.now(),
 				dataType:"json",
 				success:function (data) {
 					console.log(data);
