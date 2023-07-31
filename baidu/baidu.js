@@ -7,6 +7,11 @@ function getRandomColor() {
     return color;
 }
 
+function getRandomColorV2() {
+    var color = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+    return color;
+}
+
 function calculateCenter(pointArray) {
     var total = pointArray.length;
     var X = 0, Y = 0, Z = 0;
