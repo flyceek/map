@@ -86,7 +86,8 @@
 					// console.log(cityList);
 					return { results: cityList };
 				}
-			}
+			},
+			minimumResultsForSearch: Infinity
 		});
 
 		citySelector.on("select2:select", function (e) {
@@ -116,7 +117,8 @@
 						// console.log(regionList);
 						return { results: regionList };
 					}
-				}
+				},
+				minimumResultsForSearch: Infinity
 			});
 		});
 
@@ -149,6 +151,7 @@
 						return { results: areaList };
 					}
 				},
+				minimumResultsForSearch: Infinity,
 				multiple:true,
 				maximumSelectionLength: 5
 			});
