@@ -76,8 +76,8 @@ function createMarker(iconUrl,point,id,map){
 
 function createPolygon(pointArray,opts,id,map){
     var polygon = new BMapGL.Polygon(pointArray, {
-        strokeColor: "red",
-        strokeWeight: 2,
+        strokeColor: opts.strokeColor,
+        strokeWeight: opts.strokeWeight,
         strokeOpacity: 0.5,
         fillColor: opts.fillColor,
         fillOpacity: 0.2,
@@ -145,7 +145,9 @@ function createMapPolygon(id,label,map){
                 pointArray: [],
                 centerPoint: BMapGL.Point(0, 0),
                 polygonOpts: {
-                    fillColor: getRandomColorV2()
+                    fillColor: getRandomColorV2(),
+                    strokeColor: getRandomColor(),
+                    strokeWeight: 2
                 },
                 raw: data.Points
             };
