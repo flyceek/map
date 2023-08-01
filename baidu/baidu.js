@@ -12,6 +12,11 @@ function getRandomColorV2() {
     return color;
 }
 
+function getRandomColorV3() {
+    var color = '#'+ ('000000' + Math.floor(Math.random()*16777215).toString(16)).slice(-6);
+    return color;
+}
+
 function calculateCenter(pointArray) {
     var total = pointArray.length;
     var X = 0, Y = 0, Z = 0;
@@ -146,7 +151,7 @@ function createMapPolygon(id,label,map){
                 centerPoint: BMapGL.Point(0, 0),
                 polygonOpts: {
                     fillColor: getRandomColorV2(),
-                    strokeColor: getRandomColor(),
+                    strokeColor: getRandomColorV3(),
                     strokeWeight: 2
                 },
                 raw: data.Points
